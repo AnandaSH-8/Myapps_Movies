@@ -1,3 +1,8 @@
+
+import {key1} from "./pwd.js"
+
+const api = key1()
+
 async function detail_display(name,location)
 {
     location.innerHTML = "";
@@ -7,7 +12,7 @@ async function detail_display(name,location)
 
     try{
 
-        let response = await fetch(`http://www.omdbapi.com/?apikey=1e228080&t="${name}"`)
+        let response = await fetch(`https://www.omdbapi.com/?apikey=${api}&t="${name}"`)
 
         let data = await response.json()
         let {Actors,country,Director,Genre,Plot,Poster,Released,Runtime,Title,Writer,imdbRating} = data
