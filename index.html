@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movies</title>
+    <style>
+        body{
+            background: rgb(27, 41, 58);
+            margin: 0;
+        }
+
+        #navbar{
+            background: rgb(33, 61, 71);
+            width:100%;
+            height:60px;
+            position: sticky;
+            display: flex;
+        }
+
+        #navbar > img{
+            margin-left:25px;
+            height:55px;
+        }
+
+        .tag{
+            margin-left: 4%;
+            width:350px;
+        }
+
+        .tag > button{
+            border:none;
+            background-color: transparent;
+            color:white;
+            font-weight: bolder;
+            transform: scaleX(1.2);
+            margin:8% 4% 0%;
+            cursor: pointer;
+        }
+
+        .search_input{
+            margin: 16px 3% 0 22%;
+        }
+
+        #movie{
+            border:none;
+            border-bottom:1px solid rgb(255, 255, 255);
+            height:30px;
+            width:300px;
+            color:white;
+            font-size:18px;
+            font-family: sans-serif;
+            background-color: rgb(33, 61, 71);
+        }
+
+        #movie::placeholder{
+            color:white;
+        }
+
+        .search_input+h4 > a{
+            color:rgb(219, 214, 214);
+            font-size: 16px;
+            text-decoration:solid;
+        }
+
+        #navbar +div{
+            display: flex;
+            position: relative;
+        }
+
+        #movies {
+            height: 400px;
+            width: 305px;
+            position: absolute;
+            left:67%;
+        } 
+    
+        #movies > div{
+            width:100%;
+            height:30%;
+            display: flex;
+            color:white;
+            margin:3% 0%;
+            background: rgb(45, 67, 94);
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+
+        #movies > div > img{
+            width:60%;
+            height:100%;
+        }
+
+        #movies > div > div{
+            font-family: sans-serif;
+            margin-left: 2%;
+            width:37%;
+            text-align: center; 
+        }
+
+        #movies::-webkit-scrollbar{
+            background-color: #1B293A;
+            width:1px;
+        }
+
+        #details{
+            width:90%;
+            height:400px;
+            margin:2% 2.5% 0 4%;
+            position: absolute;
+            display: flex;
+        }
+
+        #details::-webkit-scrollbar{
+            background-color: #1B293A;
+            width:1px;
+        }
+
+        #details > img{
+            width:40%;
+            height:100%;
+        }
+
+        #details > div{
+            width:55%;
+            height:20%;
+            margin-left: 4%;         
+        }
+
+        #details > div > h3{
+            text-align: center;
+            color:white;
+            font-family: sans-serif;
+            margin-top: 0;
+            margin-left: 1%;
+        }
+
+        #details > div > h5{
+            color:white;
+            text-align: center;
+            margin-top: -1%;
+        }
+
+        #movies_list{
+            display: grid;
+            grid-template-columns: repeat(4,23%);
+            grid-row-gap: 25px;
+            justify-content: space-around;
+        }
+
+        #movies_list > div{
+            height:350px;
+            border-radius: 15px;
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+        }
+
+        #movies_list > div > img{
+            width:100%;
+            height:100%;
+            border-radius: 15px;
+        }
+
+        /* @media only screen and (min-width: 376px) and (max-width: 768px)
+        {
+            .tag{
+                margin-left: 4%;
+                display: flex;
+            }
+
+            .tag > button{
+                font-size: 11px;
+            }
+        } */
+
+    </style>
+</head>
+<body>
+    <div id = "navbar">
+        <img src="https://secure-media.hotstarext.com/web-assets/prod/images/brand-logos/disney-hotstar-logo-dark.svg" alt="">
+        <div class = "tag">
+            <button id = "trend">Trending</button>
+            <button id = "popular" >Popular</button>
+            <button id = "rated" >Top Rated</button>
+        </div>
+        <div class = "search_input">
+            <input type="text" id = "movie" placeholder="Search">
+        </div>
+        <h4><a href="signup.html">Signup</a></h4>
+    </div>
+    <div>
+        <div id = "details"></div>
+        <div id= "movies"></div>
+    </div>
+    <div id = "movies_list"></div>
+    
+    
+</body>
+</html>
+<script type = "module">
+
+    let {name} = JSON.parse(localStorage.getItem("name"))||[];
+    if(name != undefined)
+    {
+        document.querySelector("h4 > a").textContent = name;
+        document.querySelector("h4 > a").href = ""
+    }
+
+import {setdata,detail_display} from "./items.js"
+
+let movie_img= document.querySelector("#movies_list") 
+
+    import {key1,key2} from "./pwd.js"
+    const api = key1()
+
+    let wait;
+    let film = document.querySelector("#movie").addEventListener("input",debounce)
+
+    async function searchMovie() 
+    {
+        try{
+
+        let movie = document.querySelector("#movie").value
+        
+        let response = await fetch(`https://www.omdbapi.com/?apikey=${api}&s="${movie}"`)
+        
+        let data = await response.json()
+        let movies = data.Search
+        console.log("MOvies",movies)
+        display(movies)
+
+        }
+        catch(error)
+        {
+            console.log(error)
+        }
+    }
+
+    function display(movie){
+
+        document.querySelector("#movies").innerHTML = ""
+        document.querySelector("#details").style.cssText = 
+        `width:60%;`;
+
+        movie_img.style.transform =  "translateY(500px)";
+
+        if (movie == undefined)
+        {
+            document.querySelector("#details").style.width = "90%";
+            return false;
+        }
+
+        movie.forEach(function(elem){
+
+            let title = document.createElement("h5")
+            title.textContent = elem.Title
+            
+            let img = document.createElement("img")
+            img.src = elem.Poster
+            
+            let content = document.createElement("div")
+            content.append(title)
+
+            let box = document.createElement("div")
+            box.append(img,content) 
+////
+            box.addEventListener("click",async() => {
+
+                let details = document.querySelector("#details")
+
+                detail_display(elem.Title,details)
+                
+            })
+
+            document.querySelector("#movies").style.cssText = 
+                `border:transparent;
+                overflow-y:scroll;
+                overflow-x: hidden;`;
+
+            document.querySelector("#movies").append(box)        
+        })
+    }
+    let delay = 1000;
+    function debounce(func,delay)
+    {
+        if(wait)
+        {
+            clearTimeout(wait)
+        }
+
+        wait =  setTimeout(function(){
+            
+            func = searchMovie()
+            
+        },delay);
+    }
+    let api_key = key2()
+
+    let get_movie = async(link) =>{
+        let url = `${link}?api_key=${api_key}`;
+            try
+            {
+                let response = await fetch(url)
+                let result = await response.json()
+                return result.results
+            }
+            catch(error)
+            {
+                console.log(error)
+            }
+        }
+    
+    let trending = get_movie("https://api.themoviedb.org/3/trending/movie/week")
+    let popular = get_movie("https://api.themoviedb.org/3/movie/popular")
+    let top_rate = get_movie("https://api.themoviedb.org/3/movie/top_rated")
+    let similar = get_movie("https://api.themoviedb.org/3/movie/68/similar")
+
+    //Landing page movies
+    function similar_movie()
+    {
+        setdata(similar,movie_img)
+        movie_img.style.transform =  "translateY(20px)"
+    }
+    similar_movie()
+    
+        document.querySelector("#trend").addEventListener("click",function()
+        {
+            setdata(trending,movie_img)
+        })
+    
+        document.querySelector("#popular").addEventListener("click",function()
+        {
+            setdata(popular,movie_img)
+        })
+    
+        document.querySelector("#rated").addEventListener("click",function()
+        {
+            setdata(top_rate,movie_img)
+        })
+
+</script>
+

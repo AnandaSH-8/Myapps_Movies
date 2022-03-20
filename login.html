@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+         body{
+            background: rgb(27, 41, 58);
+            margin: 0;
+            background-image: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallpapercave.com%2Fwp%2Fwp2664669.jpg&f=1&nofb=1");
+        }
+
+        .top{
+            width:300px;
+            margin:auto 50%;
+            text-align: center;
+            color:rgb(144, 169, 206);
+            font-variant: small-caps;
+        }
+
+        .top > img{
+            width:200px;
+            height:100px;
+        }
+
+        .login_box{
+            margin: 2% 0 2% 50%;
+            width:320px;
+            height:160px;
+            box-shadow: 0 10px 20px rgb(34, 75, 128), 0 6px 6px rgb(68, 70, 151);
+            text-align: center;
+        }
+
+        .login_box input{
+            width:95%;
+            height:30px;
+            margin:3% 0%;
+            border:ridge 1px; 
+            background-color: transparent;
+            color:white;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        input::placeholder{
+            color:white;
+            
+        }
+
+        input.submit{
+            width:50%;
+            height: 33px;
+            font-weight: bolder;
+            color:white;
+            border-radius: 20px;
+            background: rgb(40, 61, 100);
+        }
+
+        .signup{
+            width:320px;
+            height:100px;
+            margin: auto 50%;
+            flex-wrap: wrap;
+            text-align: center;
+            box-shadow: rgba(31, 46, 68, 0.979) 0px 2px 4px, rgb(36, 55, 92) 0px 7px 13px -3px, rgba(36, 53, 100, 0.918) 0px -3px 0px inset;
+        }
+        .signup > h4{
+            margin:1% 0% 0% 0%;
+            color:rgba(226, 223, 223, 0.904);
+        }
+
+        .signup > button{
+            width:22%;
+            height:25px;
+            border:none;
+            font-weight: bolder;
+            color:rgb(211, 205, 205);
+            background: rgb(53, 78, 160);
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class = "top">
+            <img src="https://secure-media.hotstarext.com/web-assets/prod/images/brand-logos/disney-hotstar-logo-dark.svg" alt="">
+            <H1>Login here</H1>
+        </div>
+        <div class = "login_box">
+            <form action="" onsubmit="login(event)">
+                <input type="text" name="username" id="username" placeholder="Enter the user name">
+                <input type="password" name="" id="password" placeholder="Enter the Password">
+                <input type="submit" class = "submit">
+            </form>
+        </div>
+        <div class = 'signup'>
+            <h4>Don't have a Account?</h4>
+            <h4>click here</h4>
+            <button onclick="signup()">Signup</button>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    let signup = () =>{
+        window.location.href = "signup.html";
+    }
+
+    let login = async(event) => {
+        let login_data;
+        event.preventDefault()
+        try{
+            login_data = {
+                username: document.querySelector("#username").value,
+                password: document.querySelector("#password").value
+            }
+        }
+        catch(error)
+        {
+            console.log(error)
+        }
+        login_data = JSON.stringify(login_data)
+
+       try{
+            let login_url = "https://masai-api-mocker.herokuapp.com/auth/login"; // Posting 
+            let response = await fetch(login_url,{
+
+                method:"POST",
+
+                body:login_data,
+
+                headers: {
+                    "Content-Type":"application/json",
+                },
+            })
+
+            var data = await response.json();
+            
+       }
+       catch(error)
+       {
+           alert("Incorrect Username or Password, Try again!")
+           console.log(error)
+       }
+
+       let username = document.querySelector("#username").value;
+       getuser(username,data.token)
+    }
+
+    async function getuser(username,token){
+
+    try{
+        let api = `https://masai-api-mocker.herokuapp.com/user/${username}`
+        let response = await fetch(api,{
+
+            headers: {
+                "Content-Type":"application/json",
+                Authorization:`Bearer ${token}`,
+            },
+        });
+
+        let data = await response.json()
+        console.log(data,"hii")
+        localStorage.setItem("name",JSON.stringify(data))
+        alert("Login Successfull")
+        window.location.href = "index.html"
+    }
+    catch(error)
+    {
+        console.log(error)
+    }
+}
+</script>

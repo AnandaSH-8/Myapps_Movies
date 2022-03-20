@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+         body{
+            background: rgb(27, 41, 58);
+            margin: 0;
+            display: flex;
+        }
+
+        .banner{
+            width:500px;
+            height:500px;
+            background-image: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.QLh3oLzbgel7vHpRj3noTQHaHa%26pid%3DApi&f=1");
+            background-size: cover;
+            transform: translate(50px,80px);
+            margin-right:5%;
+        }
+
+        .banner + div{
+            /* margin-left:10%; */
+            color: white;
+            letter-spacing: 2px;
+            text-align: center;
+            transform: translateY(50px);
+        }
+
+        .signup_box{
+            width:350px;
+            height:400px;
+            box-shadow: 0 1px 3px rgba(207, 204, 204, 0.753), 0 1px 2px rgba(247, 247, 247, 0.719);
+            text-align: center;
+        }
+
+        .signup_box input{
+            width:90%;
+            height:30px;
+            margin:2% 0;
+            border-radius: 8px;
+        }
+
+        input::placeholder{
+            padding: 4%;
+            opacity: 0.8;
+        }
+
+        input.submit{
+            width:50%;
+            background: rgb(57, 71, 107);
+            height:33px;
+            border-radius: 5px;
+            color: white;
+            border:ridge 1px;
+            margin: 5% 0 4% 0;
+        }
+
+        span{
+            font-size: 14px;
+        }
+
+        span + button{
+            height:24px;
+            color:white;
+            background: rgb(44, 70, 126);
+            border-top: none;
+        }
+
+        .submit:hover,
+        span + button:hover{
+            background: rgb(68, 104, 180);
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class = 'banner'> </div>
+    <div>
+        <h2>Create Your Account</h2>
+        <div class = "signup_box">
+            <form action="" onsubmit="signup(event)">
+                <input type="text" id = "name" placeholder = "Name">
+                <input type="number" id = "mobile" placeholder = "Mobile Number">
+                <input type="email" id = "email" placeholder = "Email Address">
+                <input type="text" class = "username" placeholder = "Username">
+                <input type="password" class = "password" placeholder = "Password">
+                <input type="text" id = "description" placeholder = "Description">
+                <input type="submit" class = "submit">
+            </form>
+            <span>Already have the account?</span>
+            <button onclick="login()">Login</button>
+        </div>
+    </div>
+    
+</body>
+</html>
+<script>
+
+    function login()
+    {
+        window.location.href = "login.html"
+    }
+
+    let signup = async(event) => {
+        var register_data;
+        event.preventDefault()
+        try{
+            register_data = {
+                name: document.querySelector("#name").value,
+                mobile: document.querySelector("#mobile").value,
+                email: document.querySelector("#email").value,
+                username: document.querySelector(".username").value,
+                password: document.querySelector(".password").value,
+                description: document.querySelector("#description").value,
+            };
+
+            register_data = JSON.stringify(register_data)
+        }
+        catch(error)
+        {
+            console.log(error)
+        };
+
+        try{
+            let req_api = "https://masai-api-mocker.herokuapp.com/auth/register"; // Posting details
+
+            let response = await fetch(req_api,{
+                method:"POST",
+
+                body:register_data,
+
+                headers:{
+                    "Content-Type":"application/json",
+                },
+            });
+
+            let data = await response.json();
+            console.log(data)
+            if(data.error == true)
+            {
+                alert(`Registration failed, username already exists`)
+            }
+            else
+            {
+                window.location.href = "login.html"
+            }
+        }
+        catch(error)
+        {
+            console.log(error)
+        }
+    };
+
+</script>
