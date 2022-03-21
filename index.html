@@ -19,7 +19,7 @@
             display: flex;
         }
 
-        #navbar > img{
+        #navbar > a > img{
             margin-left:25px;
             height:55px;
         }
@@ -127,15 +127,15 @@
             margin-left: 4%;         
         }
 
-        #details > div > h3{
+        #details > div > h2{
             text-align: center;
             color:white;
-            font-family: sans-serif;
+            font-family: sans;
             margin-top: 0;
             margin-left: 1%;
         }
 
-        #details > div > h5{
+        #details > div > h4{
             color:white;
             text-align: center;
             margin-top: -1%;
@@ -176,7 +176,7 @@
 </head>
 <body>
     <div id = "navbar">
-        <img src="https://secure-media.hotstarext.com/web-assets/prod/images/brand-logos/disney-hotstar-logo-dark.svg" alt="">
+        <a href="index.html"><img src="https://secure-media.hotstarext.com/web-assets/prod/images/brand-logos/disney-hotstar-logo-dark.svg" alt=""></a>
         <div class = "tag">
             <button id = "trend">Trending</button>
             <button id = "popular" >Popular</button>
@@ -185,7 +185,7 @@
         <div class = "search_input">
             <input type="text" id = "movie" placeholder="Search">
         </div>
-        <h4><a href="signup.html">Signup</a></h4>
+        <h4><a id="signup" href="signup.html">Signup</a></h4>
     </div>
     <div>
         <div id = "details"></div>
@@ -266,6 +266,7 @@ let movie_img= document.querySelector("#movies_list")
 
                 let details = document.querySelector("#details")
 
+                document.querySelector("#movies").style.display = "none"
                 detail_display(elem.Title,details)
                 
             })
@@ -321,19 +322,43 @@ let movie_img= document.querySelector("#movies_list")
     }
     similar_movie()
     
+        let value = document.querySelector("#signup").textContent
+
         document.querySelector("#trend").addEventListener("click",function()
         {
-            setdata(trending,movie_img)
+            if(value == "Signup")
+            {
+                alert("Please Signup or Login to view the page")
+            }
+            else
+            {
+                setdata(trending,movie_img)
+            }
+            
         })
     
         document.querySelector("#popular").addEventListener("click",function()
         {
-            setdata(popular,movie_img)
+            if(value == "Signup")
+            {
+                alert("Please Signup or Login to view the page")
+            }
+            else
+            {
+                setdata(popular,movie_img)
+            }
         })
     
         document.querySelector("#rated").addEventListener("click",function()
         {
-            setdata(top_rate,movie_img)
+            if(value == "Signup")
+            {
+                alert("Please Signup or Login to view the page")
+            }
+            else
+            {
+                 setdata(top_rate,movie_img)
+            }
         })
 
 </script>

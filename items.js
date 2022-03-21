@@ -21,34 +21,34 @@ async function detail_display(name,location)
         image.src = Poster
         
         let content = document.createElement("div")
-            let title = document.createElement("h3")
-            title.textContent = `" ${Title} "`
+            let title = document.createElement("h2")
+            title.textContent = ` ${Title} `
 
-            let genre = document.createElement("h5")
+            let genre = document.createElement("h4")
             genre.textContent = `Genre : ${Genre}`
 
-            let plot = document.createElement("h5")
+            let plot = document.createElement("h4")
             plot.textContent = `Plot : ${Plot}`
 
-            let director = document.createElement("h5")
+            let director = document.createElement("h4")
             director.textContent = `Director : ${Director}`
 
-            let actors = document.createElement("h5")
+            let actors = document.createElement("h4")
             actors.textContent = `Actors : ${Actors}`
 
-            let writer = document.createElement("h5")
+            let writer = document.createElement("h4")
             writer.textContent = `Writer : ${Writer}`
 
-            let year = document.createElement("h5")
+            let year = document.createElement("h4")
             year.textContent = `Released Date : ${Released}`
 
-            let runtime = document.createElement("h5")
+            let runtime = document.createElement("h4")
             runtime.textContent = `Runtime : ${Runtime}`
 
-            let Country = document.createElement("h5")
+            let Country = document.createElement("h4")
             Country.textContent = `Country : ${country}`
 
-            let Rating = document.createElement("h5")
+            let Rating = document.createElement("h4")
             Rating.textContent = `Rating : ${imdbRating}⭐`
 
         content.append(title,genre,plot,director,actors,writer,year,runtime,Country,Rating)
